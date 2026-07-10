@@ -68,70 +68,6 @@ export default function Index() {
   };
 
   // --------------------------------------------------------
-  // 1. INTERACTIVE PROJECT PLANNER STATE & LOGIC
-  // --------------------------------------------------------
-  const [projectType, setProjectType] = useState<"landing" | "business" | "fullstack">("business");
-  const [addons, setAddons] = useState({
-    adminPanel: true,
-    whatsapp: false,
-    auth: false,
-    payments: false,
-    seo: true
-  });
-
-  const handleAddonToggle = (key: keyof typeof addons) => {
-    setAddons(prev => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  // Dynamic pricing calculation
-  const getEstimatedCostAndTimeline = () => {
-    let basePrice = 0;
-    let baseDays = 0;
-    
-    if (projectType === "landing") {
-      basePrice = 599;
-      baseDays = 5;
-    } else if (projectType === "business") {
-      basePrice = 1199;
-      baseDays = 10;
-    } else {
-      basePrice = 2499;
-      baseDays = 21;
-    }
-
-    let extraPrice = 0;
-    let extraDays = 0;
-
-    if (addons.adminPanel) {
-      extraPrice += 499;
-      extraDays += 3;
-    }
-    if (addons.whatsapp) {
-      extraPrice += 299;
-      extraDays += 1;
-    }
-    if (addons.auth) {
-      extraPrice += 399;
-      extraDays += 2;
-    }
-    if (addons.payments) {
-      extraPrice += 499;
-      extraDays += 3;
-    }
-    if (addons.seo) {
-      extraPrice += 199;
-      extraDays += 1;
-    }
-
-    return {
-      price: basePrice + extraPrice,
-      days: baseDays + extraDays
-    };
-  };
-
-  const { price: estimatedPrice, days: estimatedDays } = getEstimatedCostAndTimeline();
-
-  // --------------------------------------------------------
   // 2. INTERACTIVE RESTAURANT PLATFORM SIMULATOR STATE & LOGIC
   // --------------------------------------------------------
   const [activeSimulatorTab, setActiveSimulatorTab] = useState<"customer" | "admin" | "metrics">("customer");
@@ -291,38 +227,12 @@ export default function Index() {
     });
   };
 
-  // Pre-populate contact fields from Planner
-  const applyPlannerSelectionToContact = () => {
-    setFormData(prev => ({
-      ...prev,
-      projectType: projectType,
-      message: `Hi ByteCraft Solutions! I mapped out a project using your online planner:\n- Project Type: ${projectType === "landing" ? "High-Converting Landing Page" : projectType === "business" ? "Multi-Page Business Site" : "Custom Full-Stack Web App"}\n- Integrated Features: ${Object.entries(addons).filter(([_, v]) => v).map(([k]) => k).join(", ") || "None"}\n- Pre-calculated Cost Estimate: $${estimatedPrice}\n- Estimated Delivery: ${estimatedDays} Days\n\nI'd love to secure a development slot with you and discuss our business launch!`
-    }));
-    scrollToSection("contact");
-    toast({
-      title: "📋 Planner Applied!",
-      description: "We've populated your contact form below with your exact configuration.",
-      className: "bg-cyan-950 text-cyan-100 border border-cyan-500 rounded-2xl"
-    });
-  };
-
   // WhatsApp & Mailto Quick Links
   const WHATSAPP_LINK = `https://wa.me/923123220078?text=${encodeURIComponent(
     "Hello ByteCraft Solutions, I visited your website and I am interested in building a custom ultra-fast website for my business."
   )}`;
 
   const EMAIL_LINK = "mailto:Bytecraft05@gmail.com?subject=Website%20Inquiry%20-%20ByteCraft%20Solutions";
-
-  const getCustomWhatsAppPlanLink = () => {
-    const text = `Hello ByteCraft Solutions! I configured a custom website on your website planner:
-- Platform: ${projectType === "landing" ? "Landing Page" : projectType === "business" ? "Business Website" : "Full-Stack Web App"}
-- Upgrades: ${Object.entries(addons).filter(([_, v]) => v).map(([k]) => k).join(", ")}
-- Estimated Price: $${estimatedPrice}
-- Delivery Goal: ${estimatedDays} Days
-
-I would love to get started!`;
-    return `https://wa.me/923123220078?text=${encodeURIComponent(text)}`;
-  };
 
   return (
     <div className="dark bg-[#0a0d14] text-slate-100 min-h-screen font-sans selection:bg-emerald-500/30 selection:text-emerald-200 antialiased overflow-x-hidden">
@@ -357,7 +267,6 @@ I would love to get started!`;
             <div className="hidden md:flex items-center gap-8">
               <button onClick={() => scrollToSection("home")} className="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Home</button>
               <button onClick={() => scrollToSection("services")} className="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Services</button>
-              <button onClick={() => scrollToSection("planner")} className="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Project Planner</button>
               <button onClick={() => scrollToSection("portfolio")} className="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Our Work</button>
               <button onClick={() => scrollToSection("contact")} className="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Contact</button>
             </div>
@@ -390,7 +299,6 @@ I would love to get started!`;
             <div className="px-4 py-6 space-y-4">
               <button onClick={() => scrollToSection("home")} className="block w-full text-left py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-800/40 font-medium transition-all">Home</button>
               <button onClick={() => scrollToSection("services")} className="block w-full text-left py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-800/40 font-medium transition-all">Services</button>
-              <button onClick={() => scrollToSection("planner")} className="block w-full text-left py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-800/40 font-medium transition-all">Project Planner</button>
               <button onClick={() => scrollToSection("portfolio")} className="block w-full text-left py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-800/40 font-medium transition-all">Our Work</button>
               <button onClick={() => scrollToSection("contact")} className="block w-full text-left py-2 px-3 rounded-lg text-slate-300 hover:text-emerald-400 hover:bg-slate-800/40 font-medium transition-all">Contact</button>
               <div className="pt-2">
@@ -589,11 +497,8 @@ I would love to get started!`;
                 </ul>
               </CardContent>
               <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto flex items-center justify-between">
-                <button 
-                  onClick={() => {
-                    setProjectType("fullstack");
-                    applyPlannerSelectionToContact();
-                  }}
+                <button
+                  onClick={() => scrollToSection("starter-package")}
                   className="text-xs font-semibold text-emerald-400 hover:text-cyan-400 flex items-center gap-1.5 group/btn"
                 >
                   Request custom app proposal <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
@@ -627,12 +532,8 @@ I would love to get started!`;
                 </ul>
               </CardContent>
               <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto flex items-center justify-between">
-                <button 
-                  onClick={() => {
-                    setProjectType("fullstack");
-                    setAddons(prev => ({ ...prev, adminPanel: true }));
-                    applyPlannerSelectionToContact();
-                  }}
+                <button
+                  onClick={() => scrollToSection("starter-package")}
                   className="text-xs font-semibold text-cyan-400 hover:text-emerald-400 flex items-center gap-1.5 group/btn"
                 >
                   Request custom dashboard proposal <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
@@ -666,11 +567,8 @@ I would love to get started!`;
                 </ul>
               </CardContent>
               <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto flex items-center justify-between">
-                <button 
-                  onClick={() => {
-                    setProjectType("landing");
-                    applyPlannerSelectionToContact();
-                  }}
+                <button
+                  onClick={() => scrollToSection("starter-package")}
                   className="text-xs font-semibold text-cyan-400 hover:text-emerald-400 flex items-center gap-1.5 group/btn"
                 >
                   Request landing page proposal <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
@@ -704,12 +602,8 @@ I would love to get started!`;
                 </ul>
               </CardContent>
               <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto flex items-center justify-between">
-                <button 
-                  onClick={() => {
-                    setProjectType("business");
-                    setAddons(prev => ({ ...prev, seo: true }));
-                    applyPlannerSelectionToContact();
-                  }}
+                <button
+                  onClick={() => scrollToSection("starter-package")}
                   className="text-xs font-semibold text-emerald-400 hover:text-cyan-400 flex items-center gap-1.5 group/btn"
                 >
                   Request serverless setup proposal <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
@@ -727,308 +621,201 @@ I would love to get started!`;
       </section>
 
       {/* --------------------------------------------------------
-          4. INTERACTIVE PROJECT PLANNER & PRICING CALCULATOR SECTION
+          4. NEW STARTER PACKAGE SECTION
          -------------------------------------------------------- */}
-      <section id="planner" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0a0d14]/70 border-t border-slate-900">
+      <section id="starter-package" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0a0d14]/70 border-t border-slate-900">
         
-        {/* Glow Details */}
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-cyan-500/5 blur-[120px] rounded-full pointer-events-none" />
+        {/* Glow Element */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto relative z-10">
           
-          {/* Section Title */}
+          {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-            <Badge className="px-3 py-1 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/15 border border-cyan-500/30 rounded-full text-xs font-semibold uppercase tracking-wider">
-              INTERACTIVE BUILDER
+            <Badge className="px-3 py-1 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/15 border border-emerald-500/30 rounded-full text-xs font-semibold uppercase tracking-wider">
+              STARTER PACKAGE
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Design Your Perfect Solution & Budget Estimation
+              Start Building Your Dream With Us From Only PKR 30,000
             </h2>
-            <div className="h-1.5 w-24 bg-gradient-to-r from-cyan-400 to-emerald-500 rounded-full mx-auto" />
-            <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
-              Select your system foundation, toggle necessary high-performing feature components, and witness estimated costs instantly. Transparent pricing, no games.
+            <div className="h-1.5 w-24 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full mx-auto" />
+            <p className="text-slate-400 text-base sm:text-lg max-w-xl mx-auto">
+              An all-inclusive, complete package with absolutely no hidden charges. Everything you need to launch your premium web presence.
             </p>
           </div>
 
-          {/* Interactive Calculator Body Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+          {/* Features Card Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
             
-            {/* Left Control Panel Column */}
-            <div className="lg:col-span-7 bg-slate-900/40 border border-slate-800/80 rounded-3xl p-6 sm:p-8 backdrop-blur-md flex flex-col justify-between">
-              
-              <div className="space-y-8">
-                {/* Step 1: Platform Foundation */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-bold font-mono">1</span>
-                    <h3 className="text-lg font-bold text-white tracking-wide">Choose Platform Foundation</h3>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {/* Landing Page Toggle */}
-                    <button 
-                      onClick={() => setProjectType("landing")}
-                      className={`text-left p-4 rounded-2xl border transition-all duration-300 ${
-                        projectType === "landing" 
-                          ? "bg-slate-900 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-white" 
-                          : "bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700"
-                      }`}
-                    >
-                      <h4 className="font-bold text-sm text-white mb-1">Landing Page</h4>
-                      <p className="text-xs text-slate-400 mb-2">High conversion, optimized local funnel</p>
-                      <span className="text-xs font-mono font-bold text-cyan-400">$599+ Base</span>
-                    </button>
-
-                    {/* Business Website Toggle */}
-                    <button 
-                      onClick={() => setProjectType("business")}
-                      className={`text-left p-4 rounded-2xl border transition-all duration-300 ${
-                        projectType === "business" 
-                          ? "bg-slate-900 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-white" 
-                          : "bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700"
-                      }`}
-                    >
-                      <h4 className="font-bold text-sm text-white mb-1">Business Site</h4>
-                      <p className="text-xs text-slate-400 mb-2">Multi-page optimized premium showcase</p>
-                      <span className="text-xs font-mono font-bold text-cyan-400">$1,199+ Base</span>
-                    </button>
-
-                    {/* Custom Full-Stack Web App Toggle */}
-                    <button 
-                      onClick={() => setProjectType("fullstack")}
-                      className={`text-left p-4 rounded-2xl border transition-all duration-300 ${
-                        projectType === "fullstack" 
-                          ? "bg-slate-900 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-white" 
-                          : "bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700"
-                      }`}
-                    >
-                      <h4 className="font-bold text-sm text-white mb-1">Full-Stack App</h4>
-                      <p className="text-xs text-slate-400 mb-2">Dynamic custom code & database systems</p>
-                      <span className="text-xs font-mono font-bold text-cyan-400">$2,499+ Base</span>
-                    </button>
-                  </div>
+            {/* Feature Card 1 */}
+            <Card className="bg-slate-900/40 border-slate-800/80 hover:border-emerald-500/50 backdrop-blur-md rounded-3xl transition-all duration-300 hover:shadow-[0_10px_30px_rgba(16,185,129,0.1)] group flex flex-col justify-between overflow-hidden">
+              <CardHeader className="p-8 pb-4 relative">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 rounded-bl-3xl transition-opacity duration-300" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/10 to-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Check className="w-7 h-7" />
                 </div>
+                <CardTitle className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
+                  Full Custom Website Development
+                </CardTitle>
+                <CardDescription className="text-slate-400 text-sm leading-relaxed pt-2">
+                  Tailored to your business layout with premium design and functionality.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 pt-4 flex-1">
+                <ul className="space-y-3 text-sm text-slate-300">
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> Custom design system</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> Responsive layouts</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> SEO-optimized structure</li>
+                </ul>
+              </CardContent>
+              <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto">
+                <span className="text-xs font-semibold text-emerald-400">Included in Package</span>
+              </CardFooter>
+            </Card>
 
-                {/* Step 2: Component Upgrades */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-bold font-mono">2</span>
-                    <h3 className="text-lg font-bold text-white tracking-wide">Include Component Upgrades</h3>
-                  </div>
-
-                  <div className="space-y-3">
-                    
-                    {/* Admin Dashboard */}
-                    <div 
-                      onClick={() => handleAddonToggle("adminPanel")}
-                      className={`flex items-center justify-between p-3.5 rounded-2xl border cursor-pointer select-none transition-all duration-200 ${
-                        addons.adminPanel 
-                          ? "bg-slate-900/80 border-emerald-500/40 text-white" 
-                          : "bg-slate-950/30 border-slate-800 text-slate-400 hover:border-slate-800 hover:bg-slate-900/20"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
-                          addons.adminPanel ? "bg-emerald-500 border-emerald-500 text-slate-950" : "border-slate-700"
-                        }`}>
-                          {addons.adminPanel && <Check className="w-4_5 h-4_5 stroke-[3px]" />}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-white">Bespoke Admin Dashboard & Content Manager</p>
-                          <p className="text-xs text-slate-400">Add, edit, delete menu/inventory details directly in real-time</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-md">+$499</span>
-                    </div>
-
-                    {/* WhatsApp Automated API */}
-                    <div 
-                      onClick={() => handleAddonToggle("whatsapp")}
-                      className={`flex items-center justify-between p-3.5 rounded-2xl border cursor-pointer select-none transition-all duration-200 ${
-                        addons.whatsapp 
-                          ? "bg-slate-900/80 border-emerald-500/40 text-white" 
-                          : "bg-slate-950/30 border-slate-800 text-slate-400 hover:border-slate-800 hover:bg-slate-900/20"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
-                          addons.whatsapp ? "bg-emerald-500 border-emerald-500 text-slate-950" : "border-slate-700"
-                        }`}>
-                          {addons.whatsapp && <Check className="w-4_5 h-4_5 stroke-[3px]" />}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-white">WhatsApp Automated Order Delivery Bridge</p>
-                          <p className="text-xs text-slate-400">Customers instantly send checkout listings directly to your WhatsApp</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-md">+$299</span>
-                    </div>
-
-                    {/* User Authentication */}
-                    <div 
-                      onClick={() => handleAddonToggle("auth")}
-                      className={`flex items-center justify-between p-3.5 rounded-2xl border cursor-pointer select-none transition-all duration-200 ${
-                        addons.auth 
-                          ? "bg-slate-900/80 border-emerald-500/40 text-white" 
-                          : "bg-slate-950/30 border-slate-800 text-slate-400 hover:border-slate-800 hover:bg-slate-900/20"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
-                          addons.auth ? "bg-emerald-500 border-emerald-500 text-slate-950" : "border-slate-700"
-                        }`}>
-                          {addons.auth && <Check className="w-4_5 h-4_5 stroke-[3px]" />}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-white">Secure User Accounts & Auth Flows</p>
-                          <p className="text-xs text-slate-400">Safe user register, email verification, passwords & profiles</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-md">+$399</span>
-                    </div>
-
-                    {/* Stripe/E-Commerce Payments */}
-                    <div 
-                      onClick={() => handleAddonToggle("payments")}
-                      className={`flex items-center justify-between p-3.5 rounded-2xl border cursor-pointer select-none transition-all duration-200 ${
-                        addons.payments 
-                          ? "bg-slate-900/80 border-emerald-500/40 text-white" 
-                          : "bg-slate-950/30 border-slate-800 text-slate-400 hover:border-slate-800 hover:bg-slate-900/20"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
-                          addons.payments ? "bg-emerald-500 border-emerald-500 text-slate-950" : "border-slate-700"
-                        }`}>
-                          {addons.payments && <Check className="w-4_5 h-4_5 stroke-[3px]" />}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-white">Secure Payments & Stripe Processing</p>
-                          <p className="text-xs text-slate-400">Direct global credit card processing and receipts with Stripe</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-md">+$499</span>
-                    </div>
-
-                    {/* SEO Strategy Pack */}
-                    <div 
-                      onClick={() => handleAddonToggle("seo")}
-                      className={`flex items-center justify-between p-3.5 rounded-2xl border cursor-pointer select-none transition-all duration-200 ${
-                        addons.seo 
-                          ? "bg-slate-900/80 border-emerald-500/40 text-white" 
-                          : "bg-slate-950/30 border-slate-800 text-slate-400 hover:border-slate-800 hover:bg-slate-900/20"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${
-                          addons.seo ? "bg-emerald-500 border-emerald-500 text-slate-950" : "border-slate-700"
-                        }`}>
-                          {addons.seo && <Check className="w-4_5 h-4_5 stroke-[3px]" />}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-white">Full-Stack Local SEO & Metatags Strategy</p>
-                          <p className="text-xs text-slate-400">Complete structured schema schemas, rapid sitemaps, social headers</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-md">+$199</span>
-                    </div>
-
-                  </div>
+            {/* Feature Card 2 */}
+            <Card className="bg-slate-900/40 border-slate-800/80 hover:border-cyan-500/50 backdrop-blur-md rounded-3xl transition-all duration-300 hover:shadow-[0_10px_30px_rgba(6,182,212,0.1)] group flex flex-col justify-between overflow-hidden">
+              <CardHeader className="p-8 pb-4 relative">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 rounded-bl-3xl transition-opacity duration-300" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500/10 to-cyan-500/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Check className="w-7 h-7" />
                 </div>
-              </div>
+                <CardTitle className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+                  Free Domain Registration
+                </CardTitle>
+                <CardDescription className="text-slate-400 text-sm leading-relaxed pt-2">
+                  .com or local extension included at no extra cost.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 pt-4 flex-1">
+                <ul className="space-y-3 text-sm text-slate-300">
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400" /> Domain privacy protection</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400" /> Free SSL certificate</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400" /> 24/7 DNS support</li>
+                </ul>
+              </CardContent>
+              <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto">
+                <span className="text-xs font-semibold text-emerald-400">Included in Package</span>
+              </CardFooter>
+            </Card>
 
-              {/* Free Highlight */}
-              <div className="mt-8 pt-6 border-t border-slate-800 flex items-center gap-3 bg-slate-950/40 p-4 rounded-2xl">
-                <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0" />
-                <p className="text-xs text-slate-300">
-                  <strong className="text-white">Included Free with all options:</strong> 1-year free serverless hosting configuration, SSL security certificate, complete repository code handoff, responsive configuration, and 30-days dedicated engineer maintenance support.
-                </p>
-              </div>
-
-            </div>
-
-            {/* Right Results & CTA Summary Column */}
-            <div className="lg:col-span-5 flex flex-col justify-between bg-gradient-to-br from-slate-900 to-[#0e1422] border border-cyan-500/20 rounded-3xl p-6 sm:p-8 shadow-[0_0_35px_rgba(6,182,212,0.1)] relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-[50px] rounded-full" />
-              
-              <div className="space-y-6">
-                <h3 className="text-lg font-bold text-white tracking-wide border-b border-slate-800 pb-3">Project Summary</h3>
-                
-                {/* Configuration Breakdown list */}
-                <div className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">Selected Type:</span>
-                    <span className="font-bold text-slate-100 capitalize">{projectType} Platform</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">Engine Core:</span>
-                    <span className="text-emerald-400 font-mono text-xs">Vite / React Stack</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">Hosting Overhead:</span>
-                    <span className="text-emerald-400 font-bold">$0.00 / month forever</span>
-                  </div>
-                  
-                  {/* Small tags of upgrades */}
-                  <div className="pt-2">
-                    <span className="text-xs text-slate-400 block mb-2">Integrated Features:</span>
-                    <div className="flex flex-wrap gap-1.5">
-                      <Badge className="bg-slate-900 border-slate-800 text-[10px] py-0 px-2 rounded-md">Responsive UI</Badge>
-                      {addons.adminPanel && <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] py-0 px-2 rounded-md">Admin Portal</Badge>}
-                      {addons.whatsapp && <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] py-0 px-2 rounded-md">WhatsApp Orders</Badge>}
-                      {addons.auth && <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] py-0 px-2 rounded-md">Authentication</Badge>}
-                      {addons.payments && <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] py-0 px-2 rounded-md">Stripe Pay</Badge>}
-                      {addons.seo && <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] py-0 px-2 rounded-md">Advanced SEO</Badge>}
-                    </div>
-                  </div>
+            {/* Feature Card 3 */}
+            <Card className="bg-slate-900/40 border-slate-800/80 hover:border-emerald-500/50 backdrop-blur-md rounded-3xl transition-all duration-300 hover:shadow-[0_10px_30px_rgba(16,185,129,0.1)] group flex flex-col justify-between overflow-hidden">
+              <CardHeader className="p-8 pb-4 relative">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 rounded-bl-3xl transition-opacity duration-300" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/10 to-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Check className="w-7 h-7" />
                 </div>
+                <CardTitle className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
+                  High-Speed Premium Cloud Hosting Setup
+                </CardTitle>
+                <CardDescription className="text-slate-400 text-sm leading-relaxed pt-2">
+                  Serverless architecture with global CDN edge distribution for blazing-fast performance.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 pt-4 flex-1">
+                <ul className="space-y-3 text-sm text-slate-300">
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> Zero monthly platform fees</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> Global CDN edge caching</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> Automatic scaling</li>
+                </ul>
+              </CardContent>
+              <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto">
+                <span className="text-xs font-semibold text-emerald-400">Included in Package</span>
+              </CardFooter>
+            </Card>
 
-                {/* Main Estimates Display */}
-                <div className="bg-slate-950/80 rounded-2xl p-6 border border-slate-800 space-y-4">
-                  <div>
-                    <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold block">ESTIMATED INVESTMENT</span>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-4xl font-extrabold font-mono text-white">${estimatedPrice}</span>
-                      <span className="text-xs text-slate-400">USD (One-time)</span>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-900">
-                    <div>
-                      <span className="text-[10px] text-slate-500 block">DELIVERY GOAL</span>
-                      <span className="text-sm font-bold text-slate-200 flex items-center gap-1.5"><Clock className="w-4 h-4 text-emerald-400" /> ~{estimatedDays} Days</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-500 block">PLATFORM REVENUE</span>
-                      <span className="text-sm font-bold text-emerald-400 flex items-center gap-1.5"><ThumbsUp className="w-4 h-4" /> 100% Retained</span>
-                    </div>
-                  </div>
+            {/* Feature Card 4 */}
+            <Card className="bg-slate-900/40 border-slate-800/80 hover:border-cyan-500/50 backdrop-blur-md rounded-3xl transition-all duration-300 hover:shadow-[0_10px_30px_rgba(6,182,212,0.1)] group flex flex-col justify-between overflow-hidden">
+              <CardHeader className="p-8 pb-4 relative">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 rounded-bl-3xl transition-opacity duration-300" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500/10 to-cyan-500/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Check className="w-7 h-7" />
                 </div>
-              </div>
+                <CardTitle className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+                  Dedicated Admin Dashboard
+                </CardTitle>
+                <CardDescription className="text-slate-400 text-sm leading-relaxed pt-2">
+                  Full control over your products, content, and data with an intuitive management interface.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 pt-4 flex-1">
+                <ul className="space-y-3 text-sm text-slate-300">
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400" /> Easy content management</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400" /> Product/inventory control</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400" /> User-friendly interface</li>
+                </ul>
+              </CardContent>
+              <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto">
+                <span className="text-xs font-semibold text-emerald-400">Included in Package</span>
+              </CardFooter>
+            </Card>
 
-              {/* Action triggers */}
-              <div className="space-y-3 mt-8">
-                <Button 
-                  onClick={applyPlannerSelectionToContact}
-                  className="w-full rounded-2xl bg-slate-100 hover:bg-white text-slate-950 font-bold py-6 text-sm flex items-center justify-center gap-2 shadow-lg"
-                >
-                  <Sliders className="w-4 h-4" />
-                  <span>Apply and Fill Out Contact Form</span>
-                </Button>
+            {/* Feature Card 5 */}
+            <Card className="bg-slate-900/40 border-slate-800/80 hover:border-emerald-500/50 backdrop-blur-md rounded-3xl transition-all duration-300 hover:shadow-[0_10px_30px_rgba(16,185,129,0.1)] group flex flex-col justify-between overflow-hidden">
+              <CardHeader className="p-8 pb-4 relative">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 rounded-bl-3xl transition-opacity duration-300" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/10 to-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Check className="w-7 h-7" />
+                </div>
+                <CardTitle className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">
+                  Zero Monthly Platform Fees
+                </CardTitle>
+                <CardDescription className="text-slate-400 text-sm leading-relaxed pt-2">
+                  Pay once, run forever on serverless architecture with no recurring hosting costs.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 pt-4 flex-1">
+                <ul className="space-y-3 text-sm text-slate-300">
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> No subscription fees</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> One-time payment only</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> Lifetime ownership</li>
+                </ul>
+              </CardContent>
+              <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto">
+                <span className="text-xs font-semibold text-emerald-400">Included in Package</span>
+              </CardFooter>
+            </Card>
 
-                <a 
-                  href={getCustomWhatsAppPlanLink()} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition-all text-sm"
-                >
-                  <MessageSquare className="w-4 h-4 fill-current" />
-                  <span>Send This Config to Developer</span>
-                </a>
-              </div>
+            {/* Feature Card 6 */}
+            <Card className="bg-slate-900/40 border-slate-800/80 hover:border-cyan-500/50 backdrop-blur-md rounded-3xl transition-all duration-300 hover:shadow-[0_10px_30px_rgba(6,182,212,0.1)] group flex flex-col justify-between overflow-hidden">
+              <CardHeader className="p-8 pb-4 relative">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 rounded-bl-3xl transition-opacity duration-300" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500/10 to-cyan-500/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Check className="w-7 h-7" />
+                </div>
+                <CardTitle className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+                  Complete End-to-End Deployment & Launch Setup
+                </CardTitle>
+                <CardDescription className="text-slate-400 text-sm leading-relaxed pt-2">
+                  Full deployment, testing, and launch with complete documentation and handoff.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 pt-4 flex-1">
+                <ul className="space-y-3 text-sm text-slate-300">
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400" /> Production deployment</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400" /> Testing & QA</li>
+                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-cyan-400" /> Documentation & handoff</li>
+                </ul>
+              </CardContent>
+              <CardFooter className="p-8 pt-0 border-t border-slate-800/50 mt-auto">
+                <span className="text-xs font-semibold text-emerald-400">Included in Package</span>
+              </CardFooter>
+            </Card>
 
-            </div>
+          </div>
 
+          {/* CTA Button Section */}
+          <div className="text-center mt-16">
+            <a 
+              href="https://wa.me/923123220078?text=Hello%20ByteCraft%20Solutions,%20I%20am%20interested%20in%20your%20PKR%2030,000%20All-In-One%20Web%20Package.%20Let's%20discuss!" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-lg shadow-[0_4px_20px_rgba(16,185,129,0.3)] hover:shadow-[0_4px_25px_rgba(16,185,129,0.5)] transition-all duration-300 transform hover:-translate-y-0.5"
+            >
+              <MessageSquare className="w-5 h-5 fill-current" />
+              <span>Order This Package</span>
+            </a>
           </div>
 
         </div>
@@ -1146,7 +933,7 @@ I would love to get started!`;
               {/* TAB 1: CUSTOMER APP VIEW */}
               {activeSimulatorTab === "customer" && (
                 <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start animate-in fade-in duration-300">
-                  
+                 
                   {/* Left Column: Menu Items */}
                   <div className="lg:col-span-7 space-y-4">
                     <div className="flex items-center justify-between mb-2">
@@ -1273,10 +1060,10 @@ I would love to get started!`;
               {/* TAB 2: MERCHANT ADMIN PANEL VIEW */}
               {activeSimulatorTab === "admin" && (
                 <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
-                  
+                 
                   {/* Top Dashboard Header Cards */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    
+                   
                     {/* Metric 1 */}
                     <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
                       <div className="space-y-1">
@@ -1391,10 +1178,10 @@ I would love to get started!`;
               {/* TAB 3: SYSTEM CORE PERFORMANCE METRICS */}
               {activeSimulatorTab === "metrics" && (
                 <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center animate-in fade-in duration-300">
-                  
+                 
                   {/* Left Column: Lighthouse Speed Circles */}
                   <div className="md:col-span-5 flex flex-wrap justify-center gap-6">
-                    
+                   
                     {/* Circle 1 */}
                     <div className="text-center space-y-1.5 bg-slate-900/60 p-4 rounded-2xl border border-slate-800 w-28 h-28 flex flex-col justify-center items-center">
                       <div className="relative w-14 h-14 rounded-full border-2 border-emerald-500 flex items-center justify-center bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
@@ -1426,7 +1213,7 @@ I would love to get started!`;
                     <h4 className="font-bold text-base text-white">Why Hand-Crafted Code Crushes WordPress</h4>
                     
                     <div className="space-y-3 font-mono text-xs">
-                      
+                     
                       <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-900">
                         <div className="flex justify-between items-center text-slate-400 mb-1">
                           <span>First Contentful Paint (FCP)</span>
@@ -1495,7 +1282,7 @@ I would love to get started!`;
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto relative z-10">
-          
+         
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <Badge className="px-3 py-1 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/15 border border-emerald-500/30 rounded-full text-xs font-semibold uppercase tracking-wider">
@@ -1511,10 +1298,10 @@ I would love to get started!`;
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            
+           
             {/* Left Column: Form Info & Contact Options */}
             <div className="lg:col-span-5 space-y-8">
-              
+             
               <div className="space-y-4">
                 <h3 className="text-2xl font-bold text-white tracking-wide">Direct Connections</h3>
                 <p className="text-slate-400 text-sm leading-relaxed">
@@ -1524,7 +1311,7 @@ I would love to get started!`;
 
               {/* Instant Communication Bridges Card */}
               <div className="space-y-4">
-                
+               
                 {/* WHATSAPP ACTION BUTTON */}
                 <a 
                   href={WHATSAPP_LINK} 
@@ -1590,7 +1377,7 @@ I would love to get started!`;
 
             {/* Right Column: Custom Web Inquiry Form */}
             <div className="lg:col-span-7 bg-slate-900/40 border border-slate-800/80 rounded-3xl p-6 sm:p-8 backdrop-blur-md">
-              
+             
               {formSubmitted ? (
                 // SUCCESS STATE WITH INTERACTIVE CONTROLS
                 <div className="text-center py-12 space-y-6 animate-in zoom-in-95 duration-300">
@@ -1645,7 +1432,7 @@ I would love to get started!`;
               ) : (
                 // STANDARD INPUT FORM
                 <form onSubmit={handleFormSubmit} className="space-y-6">
-                  
+                 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Full Name */}
                     <div className="space-y-2">
@@ -1777,7 +1564,7 @@ I would love to get started!`;
          -------------------------------------------------------- */}
       <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-[#0a0d14]/80 border-t border-slate-900">
         <div className="max-w-4xl mx-auto relative z-10">
-          
+         
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <Badge className="px-3 py-1 bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/15 border border-cyan-500/30 rounded-full text-xs font-semibold uppercase tracking-wider">
@@ -1791,7 +1578,7 @@ I would love to get started!`;
 
           {/* Accordion List */}
           <div className="space-y-4">
-            
+           
             {/* FAQ Item 1 */}
             <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 hover:border-slate-700 transition-colors">
               <h4 className="text-sm sm:text-base font-bold text-white mb-2">What does "zero monthly hosting overhead" mean?</h4>
@@ -1838,7 +1625,7 @@ I would love to get started!`;
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-1 bg-gradient-to-r from-transparent via-emerald-500/25 to-transparent blur-md" />
 
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-          
+         
           {/* Logo & Brief Description */}
           <div className="space-y-4 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 cursor-pointer group" onClick={() => scrollToSection("home")}>
@@ -1858,7 +1645,6 @@ I would love to get started!`;
           <div className="flex flex-wrap justify-center gap-6 text-xs text-slate-400 font-medium">
             <button onClick={() => scrollToSection("home")} className="hover:text-emerald-400 transition-colors">Home</button>
             <button onClick={() => scrollToSection("services")} className="hover:text-emerald-400 transition-colors">Services</button>
-            <button onClick={() => scrollToSection("planner")} className="hover:text-emerald-400 transition-colors">Pricing Planner</button>
             <button onClick={() => scrollToSection("portfolio")} className="hover:text-emerald-400 transition-colors">Featured Project</button>
             <button onClick={() => scrollToSection("contact")} className="hover:text-emerald-400 transition-colors">Contact</button>
           </div>
